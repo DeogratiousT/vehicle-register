@@ -26,7 +26,7 @@ class Logout
             throw new AuthenticationException('Authentication exception', $user->currentAccessToken());
         }
 
-        $user->tokens()->delete();
+        // $user->tokens()->delete();
 
         return [
             'user' => $user,
