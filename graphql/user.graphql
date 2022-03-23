@@ -9,6 +9,10 @@ input RegisterInput {
     password: String!
 }
 
+input LogoutInput{
+    email: String!
+}
+
 type LoginResponse {
     access_token: String
     user: User
@@ -19,8 +23,15 @@ type RegisterResponse {
     user: User
 }
 
+type LogoutResponse {
+    user: User
+    message: String
+}
+
 extend type Mutation {
     login(input: LoginInput @spread): LoginResponse! @field(resolver: "User\\Login")
 
     register(input: RegisterInput @spread): RegisterResponse! @field(resolver: "User\\Register")
+
+    logout(input: LogoutInput @spread): LogoutResponse! @field(resolver: "User\\Logout")
 }
