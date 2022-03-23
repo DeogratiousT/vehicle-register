@@ -1,0 +1,26 @@
+input LoginInput {  
+    email: String!
+    password: String!
+}
+
+input RegisterInput {
+    name: String!
+    email: String!
+    password: String!
+}
+
+type LoginResponse {
+    access_token: String
+    user: User
+}
+
+type RegisterResponse {
+    access_token: String
+    user: User
+}
+
+extend type Mutation {
+    login(input: LoginInput @spread): LoginResponse! @field(resolver: "User\\Login")
+
+    register(input: RegisterInput @spread): RegisterResponse! @field(resolver: "User\\Register")
+}
