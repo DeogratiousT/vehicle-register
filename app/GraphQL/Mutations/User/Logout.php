@@ -23,7 +23,7 @@ class Logout
         $user = User::where('email', $args['email'])->first();
     
         if ($user->currentAccessToken() == null) {
-            throw new AuthenticationException('Authentication exception', 'User has no active access tokens');
+            throw new AuthenticationException('Authentication exception', $user->currentAccessToken());
         }
 
         $user->tokens()->delete();
