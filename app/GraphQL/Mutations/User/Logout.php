@@ -3,6 +3,7 @@
 namespace App\GraphQL\Mutations\User;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use GraphQL\Type\Definition\ResolveInfo;
 use App\GraphQL\Exceptions\AuthenticationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -21,12 +22,12 @@ class Logout
     public function __invoke($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $user = User::where('email', $args['email'])->first();
-    
-        if ($user->currentAccessToken() == null) {
-            throw new AuthenticationException('Authentication exception', $user->currentAccessToken());
-        }
 
-        // $user->tokens()->delete();
+        if ($user->tokens()->count() == 0) {
+            throw new AuthenticationException('Authentication exception', 'User has no active access tokens');
+        }
+        
+        $user->tokens()->delete();
 
         return [
             'user' => $user,
