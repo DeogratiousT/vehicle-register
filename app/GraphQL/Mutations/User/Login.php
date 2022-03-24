@@ -34,6 +34,7 @@ class Login
         $request = $user->createToken('access_token')->plainTextToken;
 
         return [
+            'message' => 'User Logged In Successfully',
             'access_token' => $request,
             'user' => $user,
         ];

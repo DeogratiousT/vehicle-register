@@ -38,6 +38,7 @@ class Register
         $request = $user->createToken('access_token')->plainTextToken;
 
         return [
+            'message' => 'User Registered Successfully',
             'access_token' => $request,
             'user' => $user,
         ];

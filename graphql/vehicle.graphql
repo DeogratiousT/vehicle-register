@@ -1,31 +1,43 @@
 input CreateVehicleInput {  
-    email: String!
-    password: String!
+    user_id: Int! @rules(apply: ["required", "exists:users,id"])
+    registration_number: String! @rules(apply: ["required", "string", "unique:vehicles,registration_number"])
+    year_of_manufacture: Int! @rules(apply: ["required", "integer"])
+    type: String! @rules(apply: ["required", "string"])
+    tonnage: Float! @rules(apply: ["required", "numeric"])
 }
 
 input UpdateVehicleInput {
-    name: String!
-    email: String!
-    password: String!
+    id: Int! @rules(apply: ["required", "exists:vehicles,id"])
+    type: String! @rules(apply: ["required", "string"])
+    tonnage: Float! @rules(apply: ["required", "numeric"])
+    user_id: Int! @rules(apply: ["required", "exists:users,id"])
 }
 
 type CreateVehicleResponse {
-    access_token: String
-    user: User
+    message: String
+    vehicle: Vehicle
 }
 
 type UpdateVehicleResponse {
-    access_token: String
-    user: User
+    message: String
+    vehicle: Vehicle
 }
 
 type Vehicle {
+    id: ID!
     registration_number: String!
     year_of_manufacture: Int!
     type: String!
-    tonnage: Int!
+    tonnage: Float!
+    user: User @belongsTo 
 }
 
-extend type Mutation {
-    
+extend type Mutation @guard {
+    createVehicle(input: CreateVehicleInput @spread): CreateVehicleResponse! @field(resolver: "Vehicle\\Create")
+
+    updateVehicle(input: UpdateVehicleInput @spread): UpdateVehicleResponse! @field(resolver: "Vehicle\\Update")
+}
+
+extend type Query @guard {
+    userVehicles(id: ID @rules(apply: ["required", "exists:users,id"])  @eq): [User!]! @all
 }

@@ -1,14 +1,12 @@
 <?php
 
-namespace App\GraphQL\Mutations\User;
+namespace App\GraphQL\Mutations\Vehicle;
 
-use App\Models\User;
-use Illuminate\Support\Facades\Log;
+use App\Models\Vehicle;
 use GraphQL\Type\Definition\ResolveInfo;
-use App\GraphQL\Exceptions\AuthenticationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class Logout
+class Update
 {
     /**
      * Return a value for the field.
@@ -21,17 +19,17 @@ class Logout
      */
     public function __invoke($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $user = User::where('email', $args['email'])->first();
+        $vehicle = Vehicle::find($args['id']);
 
-        if ($user->tokens()->count() == 0) {
-            throw new AuthenticationException('Authentication exception', 'User has no active access tokens');
-        }
-        
-        $user->tokens()->delete();
+        $vehicle->update([
+            'user_id' => $args['user_id'],
+            'type' => $args['type'],
+            'tonnage' => $args['tonnage']
+        ]);
 
         return [
-            'message' => 'User Logged Out Successfully',
-            'user' => $user,
+            'message' => 'Vehicle Updated Successfully',
+            'vehicle' => $vehicle
         ];
     }
 }
