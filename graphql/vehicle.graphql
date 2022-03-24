@@ -1,0 +1,31 @@
+input CreateVehicleInput {  
+    email: String!
+    password: String!
+}
+
+input UpdateVehicleInput {
+    name: String!
+    email: String!
+    password: String!
+}
+
+type CreateVehicleResponse {
+    access_token: String
+    user: User
+}
+
+type UpdateVehicleResponse {
+    access_token: String
+    user: User
+}
+
+type Vehicle {
+    registration_number: String!
+    year_of_manufacture: Int!
+    type: String!
+    tonnage: Int!
+}
+
+extend type Mutation {
+    
+}
